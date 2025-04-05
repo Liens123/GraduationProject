@@ -18,7 +18,8 @@
     </environments>
 
     <mappers>
-        <mapper resource=""
+        <mapper resource="AdminUserMapper.xml"/>
+
     </mappers>
 
 </configuration>
