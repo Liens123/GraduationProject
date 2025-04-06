@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="AdminUserMapper">
+<mapper namespace="org.example.graduation_project.mapper.AdminUserMapper">
+
+    <!-- 字段映射 -->
     <resultMap id="BaseResultMap" type="org.example.graduation_project.model.AdminUser">
         <id property="id" column="id"/>
         <result property="username" column="username"/>
@@ -14,8 +15,28 @@
         <result property="updatedTime" column="updated_time"/>
     </resultMap>
 
+    <!-- 原有 -->
     <select id="findByUsername" resultMap="BaseResultMap" parameterType="String">
         SELECT * FROM admin_user WHERE username = #{username} LIMIT 1
     </select>
+
+    <!-- (新增) insert -->
+    <insert id="insert" parameterType="org.example.graduation_project.model.AdminUser">
+        INSERT INTO admin_user (username, name, password, status, operator, created_time, updated_time)
+        VALUES (#{username}, #{name}, #{password}, #{status}, #{operator}, #{createdTime}, #{updatedTime})
+    </insert>
+
+    <!-- (新增) update -->
+    <update id="update" parameterType="org.example.graduation_project.model.AdminUser">
+        UPDATE admin_user
+        SET
+        username = #{username},
+        name = #{name},
+        password = #{password},
+        status = #{status},
+        operator = #{operator},
+        updated_time = #{updatedTime}
+        WHERE id = #{id}
+    </update>
 
 </mapper>

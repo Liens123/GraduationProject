@@ -19,7 +19,6 @@
 
     <mappers>
         <mapper resource="AdminUserMapper.xml"/>
-
     </mappers>
 
 </configuration>
