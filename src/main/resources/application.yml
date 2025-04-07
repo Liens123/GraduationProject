@@ -15,4 +15,5 @@ spring:
 
   thymeleaf:
     check-template-location: false
-
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml

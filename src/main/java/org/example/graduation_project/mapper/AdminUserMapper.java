@@ -1,7 +1,9 @@
 package org.example.graduation_project.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.example.graduation_project.model.AdminUser;
 
+@Mapper
 public interface AdminUserMapper {
     /**
      * 通过用户名查找用户

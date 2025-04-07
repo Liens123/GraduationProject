@@ -75,10 +75,10 @@
         </dependency>
 
         <!-- 使用数据库保存会话（可选，如果不需Session持久化可去掉） -->
-        <dependency>
-            <groupId>org.springframework.session</groupId>
-            <artifactId>spring-session-jdbc</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.session</groupId>-->
+<!--            <artifactId>spring-session-jdbc</artifactId>-->
+<!--        </dependency>-->
 
         <!-- 开发调试工具 -->
         <dependency>
