@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.example.graduation_project.model.AdminUser;
 
 @Mapper
-public interface AdminUserMapper {
+public interface LoginMapper {
     /**
      * 通过用户名查找用户
      */

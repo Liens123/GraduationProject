@@ -1,27 +1,23 @@
 package org.example.graduation_project.controller;
 
-import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
+import org.example.graduation_project.api.Result;
 import org.example.graduation_project.api.inner.req.LoginRequest;
-import org.example.graduation_project.api.inner.resp.ApiResponse;
-import org.example.graduation_project.model.AdminUser;
-import org.example.graduation_project.service.AdminUserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.example.graduation_project.api.inner.LoginApi;
+import org.example.graduation_project.api.inner.resp.login.LoginByPasswordResp;
+import org.example.graduation_project.service.Login.impl.LoginServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
-@RequestMapping("/api/auth")
-public class AdminUserController {
+@Tag(name = "后台登录接口", description = "用户登录与令牌管理")
+public class AdminUserController implements LoginApi {
 
-    @Autowired
-    private AdminUserService adminUserService;
+    @Resource
+    private LoginServiceImpl loginService;
 
-    /**
-     * 用户登录接口
-     */
-    @PostMapping("/login")
-    public ApiResponse<AdminUser> login(@RequestBody @Valid LoginRequest request) {
-        AdminUser user = adminUserService.login(request.getUsername(), request.getPassword());
-        return ApiResponse.success(user);
+    @Override
+    public Result<LoginByPasswordResp> loginByPassword(LoginRequest req) {
+        return Result.success(loginService.login(req));
     }
 }

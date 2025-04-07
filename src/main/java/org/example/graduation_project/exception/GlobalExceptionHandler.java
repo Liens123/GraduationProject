@@ -1,8 +1,10 @@
 package org.example.graduation_project.exception;
 
-import org.example.graduation_project.api.inner.resp.ApiResponse;
+import org.example.graduation_project.api.Result;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import static org.example.graduation_project.api.Result.ResultCodeEnum.A00004;
 
 /**
  * 全局异常捕获并统一返回
@@ -12,13 +14,13 @@ public class GlobalExceptionHandler {
 
     // 处理业务异常
     @ExceptionHandler(BizException.class)
-    public ApiResponse<?> handleBizException(BizException ex) {
-        return ApiResponse.error(ex.getMessage());
+    public Result<?> handleBizException(BizException ex) {
+        return Result.error("A00003",ex.getMessage());
     }
 
     // 处理其他异常
     @ExceptionHandler(Exception.class)
-    public ApiResponse<?> handleException(Exception ex) {
-        return ApiResponse.error("系统错误，请联系管理员");
+    public Result<?> handleException(Exception ex) {
+        return Result.error(A00004);
     }
 }

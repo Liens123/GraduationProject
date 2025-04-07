@@ -2,7 +2,7 @@ package org.example.graduation_project.dao;
 
 import org.example.graduation_project.model.AdminUser;
 
-public interface AdminUserDao {
+public interface LoginDao {
     /**
      * @param adminUser
      * @return
