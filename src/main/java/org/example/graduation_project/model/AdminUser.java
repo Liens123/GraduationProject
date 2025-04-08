@@ -1,8 +1,13 @@
 package org.example.graduation_project.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.Date;
 
+
 public class AdminUser {
+
+    @Schema(description = "用户id")
     private Long id;
 
     private String username;

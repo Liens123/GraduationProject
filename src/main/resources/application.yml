@@ -12,8 +12,20 @@ spring:
     username: root
     password: 123
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+  mvc:
+    path match:
+      matching-strategy: ant_path_matcher
   thymeleaf:
     check-template-location: false
+
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+
+
