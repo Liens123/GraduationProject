@@ -1,4 +1,4 @@
-package org.example.graduation_project.dao;
+package org.example.graduation_project.dao.login;
 
 import org.example.graduation_project.model.AdminUser;
 

@@ -1,12 +1,12 @@
-package org.example.graduation_project.service.Login.impl;
+package org.example.graduation_project.service.login.impl;
 
 import jakarta.annotation.Resource;
 import org.example.graduation_project.api.inner.req.LoginRequest;
 import org.example.graduation_project.api.inner.resp.login.LoginByPasswordResp;
-import org.example.graduation_project.dao.LoginDao;
+import org.example.graduation_project.dao.login.LoginDao;
 import org.example.graduation_project.exception.BizException;
 import org.example.graduation_project.model.AdminUser;
-import org.example.graduation_project.service.Login.LoginService;
+import org.example.graduation_project.service.login.LoginService;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;

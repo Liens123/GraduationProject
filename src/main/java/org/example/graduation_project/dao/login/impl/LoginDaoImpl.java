@@ -1,7 +1,7 @@
-package org.example.graduation_project.dao.impl;
+package org.example.graduation_project.dao.login.impl;
 
 import jakarta.annotation.Resource;
-import org.example.graduation_project.dao.LoginDao;
+import org.example.graduation_project.dao.login.LoginDao;
 import org.example.graduation_project.mapper.LoginMapper;
 import org.example.graduation_project.model.AdminUser;
 import org.springframework.stereotype.Repository;

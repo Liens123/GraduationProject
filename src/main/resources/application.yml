@@ -20,6 +20,7 @@ spring:
 
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
+  type-aliases-package: org.example.graduation_project.model
 
 springdoc:
   api-docs:

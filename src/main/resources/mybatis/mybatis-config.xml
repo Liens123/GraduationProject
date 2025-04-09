@@ -19,6 +19,7 @@
 
     <mappers>
         <mapper resource="LoginMapper.xml"/>
+        <mapper resource="ExcelDataMapper.xml"/>
     </mappers>
 
 </configuration>
