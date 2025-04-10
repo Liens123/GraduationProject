@@ -34,16 +34,19 @@ public class CommonServiceImpl implements CommonService {
         String originalFilename = file.getOriginalFilename();
 
         if (originalFilename == null) {
-            originalFilename = "";
+            throw new BizException("无法获取文件名，请重试");
         }
 
         if (file.getSize() > MAX_FILE_SIZE) {
             throw new BizException("文件大小超过20MB");
         }
 
-        if (!originalFilename.endsWith(".xls") || originalFilename.endsWith(".xlsx")) {
+        System.out.println("实际上传文件名为：" + originalFilename);
+
+        if (!(originalFilename.toLowerCase().endsWith(".xls") || originalFilename.toLowerCase().endsWith(".xlsx"))) {
             throw new BizException("文件格式不支持，请上传Excel文件（.xls或.xlsx）");
         }
+
 
         try (InputStream is = file.getInputStream()) {
             dataList = EasyExcel.read(is)
@@ -56,6 +59,7 @@ public class CommonServiceImpl implements CommonService {
 
         if (dataList != null && !dataList.isEmpty()) {
             excelDataDao.save(dataList);
+            System.out.println("数据已插入！");
         }
         if (dataList != null) {
             return dataList.size();

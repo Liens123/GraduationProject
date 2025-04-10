@@ -15,7 +15,7 @@ public class ExcelDataDaoImpl implements ExcelDataDao {
 
     @Override
     public void save(List<ExcelData> dataList) {
-        if(dataList == null || dataList.isEmpty()){
+        if(dataList != null && !dataList.isEmpty()){
             excelDataMapper.batchInsert(dataList);
         }
     }

@@ -10,7 +10,6 @@ public interface ExcelDataMapper {
 
     /**
      * @param dataList
-     * @return int
      */
-    int batchInsert(List<ExcelData> dataList);
+    void batchInsert(List<ExcelData> dataList);
 }
