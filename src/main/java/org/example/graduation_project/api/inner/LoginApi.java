@@ -19,3 +19,4 @@ public interface LoginApi {
     @PostMapping("/password")
     Result<LoginByPasswordResp> loginByPassword(@RequestBody @Valid LoginRequest loginRequest);
 }
+

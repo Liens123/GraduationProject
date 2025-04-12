@@ -34,4 +34,52 @@ public class ExcelData {
     @Schema(description = "对话音频")
     @ExcelProperty("语音")
     private String urlVoice;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
+
+    public String getUrlVoice() {
+        return urlVoice;
+    }
+
+    public void setUrlVoice(String urlVoice) {
+        this.urlVoice = urlVoice;
+    }
 }
