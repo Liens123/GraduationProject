@@ -12,10 +12,16 @@ spring:
       timeout: 10s
       database: 0
   datasource:
-    url: jdbc:mysql://localhost:3306/database_analysis
+    url: jdbc:mysql://localhost:3306/graduation_project_db
     username: root
     password: 123
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      maximum-pool-size: 10
+      minimum-idle: 2
   mvc:
     path match:
       matching-strategy: ant_path_matcher
@@ -27,7 +33,8 @@ mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
   type-aliases-package: org.example.graduation_project.model
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    map-underscore-to-camel-case: true
 
 springdoc:
   api-docs:
@@ -42,3 +49,8 @@ springdoc:
         redis-key-prefix: "login:token:"
         expire-time-seconds: 3600
 
+logging:
+  level:
+    org.mybatis: DEBUG
+    org.springframework.transaction: DEBUG
+    org.example.graduation_project: INFO

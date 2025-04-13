@@ -1,4 +1,5 @@
-package org.example.graduation_project.api.inner.resp.login;
+package org.example.graduation_project.dto;
+
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginByPasswordResp {
-    @Schema(description = "请求令牌")
-    private String accessToken;
+public class HourlyStatsDTO {
+
+    @Schema(description = "小时")
+    private Integer hour;
+    @Schema(description = "小时对话总数")
+    private Integer hourlyCount;
 }

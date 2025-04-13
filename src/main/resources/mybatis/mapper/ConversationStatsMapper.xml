@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.graduation_project.mapper.ConversationStatsMapper">
+    <resultMap id="DailyStatMap" type="org.example.graduation_project.model.StatConversationDaily">
+        <result property="statDate" column="stat_date" jdbcType="DATE"/>
+        <result property="totalCount" column="total_count" jdbcType="INTEGER"/>
+        <result property="lastUpdated" column="last_updated" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+    <resultMap id="HourlyStatMap" type="org.example.graduation_project.model.StatConversationHourly">
+        <result property="statDatetime" column="stat_datetime" jdbcType="TIMESTAMP"/>
+        <result property="hourlyCount" column="hourly_count" jdbcType="INTEGER"/>
+        <result property="lastUpdated" column="last_updated" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 按日计算对话总数 -->
+    <select id="calculateDailyCount" resultType="int">
+        SELECT COUNT(*)
+        FROM conversation_log
+        WHERE DATE(log_time) = #{date}
+          AND (status IS    NOT NULL AND status != '违规')
+    </select>
+
+    <!-- 按小时计算对话总数 -->
+    <select id="calculateHourlyCount" resultType="org.example.graduation_project.dto.HourlyStatsDTO">
+        SELECT HOUR(log_time) AS hour, COUNT(*) AS hourlyCount
+        FROM conversation_log
+        WHERE DATE(log_time) = #{date}
+          AND (status IS NOT NULL AND status != '违规')
+        GROUP BY HOUR(log_time)
+        ORDER BY hour
+    </select>
+
+    <!-- 新增每日统计表 -->
+    <insert id="upsertDailyStat">
+        INSERT INTO stat_conversation_daily (stat_date,total_count,last_updated)
+        VALUES (#{date},#{count},NOW())
+        ON DUPLICATE KEY UPDATE
+         total_count = VALUES(total_count),
+         last_updated = VALUES(last_updated)
+    </insert>
+
+    <!-- 批量新增每小时统计表 -->
+    <insert id="batchUpsertHourlyStats" parameterType="java.util.List">
+        INSERT INTO stat_conversation_hourly (stat_datetime, hourly_count, last_updated)
+        VALUES
+        <foreach collection="list" item="h" separator=",">
+            (
+            CONCAT(#{date}, ' ', LPAD(#{h.hour}, 2, '0'), ':00:00'),
+            #{h.hourlyCount},
+            NOW()
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        hourly_count = VALUES(hourly_count),
+        last_updated = VALUES(last_updated)
+    </insert>
+
+    <!-- 查询日统计: 用于 ECharts -->
+    <select id="findDailyStatsRange" resultType="org.example.graduation_project.dto.DailyStatsDTO">
+        SELECT stat_date AS statDate, total_count AS totalCount
+        FROM stat_conversation_daily
+        WHERE stat_date BETWEEN #{startDate} AND #{endDate}
+        ORDER BY stat_date
+    </select>
+
+    <!-- 查询某日每小时统计: 用于 ECharts -->
+    <select id="findHourlyStats" resultType="org.example.graduation_project.dto.HourlyStatsDTO">
+        SELECT HOUR(stat_datetime) AS hour, hourly_count AS hourlyCount
+        FROM stat_conversation_hourly
+        WHERE DATE(stat_datetime) = #{date}
+        ORDER BY stat_datetime
+    </select>
+    
+</mapper>

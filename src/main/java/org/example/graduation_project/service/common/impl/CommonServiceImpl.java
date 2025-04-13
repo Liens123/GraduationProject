@@ -4,7 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import jakarta.annotation.Resource;
 import org.example.graduation_project.dao.excelupload.ExcelDataDao;
 import org.example.graduation_project.exception.BizException;
-import org.example.graduation_project.model.ExcelData;
+import org.example.graduation_project.model.ConversationLog;
 import org.example.graduation_project.service.common.CommonService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,11 +44,11 @@ public class CommonServiceImpl implements CommonService {
             throw new BizException("文件格式不支持，请上传Excel文件（.xls或.xlsx）");
         }
 
-        List<ExcelData> dataList = new ArrayList<>();
+        List<ConversationLog> dataList = new ArrayList<>();
 
         try (InputStream is = file.getInputStream()) {
             dataList = EasyExcel.read(is)
-                    .head(ExcelData.class)
+                    .head(ConversationLog.class)
                     .sheet()
                     .doReadSync();
         } catch (Exception e) {

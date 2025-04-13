@@ -1,23 +1,29 @@
 package org.example.graduation_project.config;
 
+import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer; // 用于禁用 CSRF 等
-import org.springframework.security.config.http.SessionCreationPolicy; // 用于无状态 Session
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder; // 推荐使用的密码编码器
-import org.springframework.security.crypto.password.PasswordEncoder; // 密码编码器接口
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity // 启用 Web 安全性
 public class SecurityConfig {
 
+    @Resource
+    private TokenAuthenticationFilter tokenAuthenticationFilter;
+
     // 定义公开访问的路径
     private static final String[] PUBLIC_PATHS = {
             "/api/v1/graduation/web/inner/login/password", // 登录接口
             "/api/v1/graduation/web/inner/login/register", //注册接口
+            "/api/v1/graduation/web/inner/stats/**", //每日图表接口
             "/v3/api-docs/**",               // OpenAPI v3 文档
             "/swagger-ui.html",             // Swagger UI 页面
             "/swagger-ui/**",               // Swagger UI 静态资源
@@ -32,6 +38,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(PUBLIC_PATHS).permitAll() // 公开路径允许所有访问
                         .requestMatchers("/api/v1/graduation/web/inner/common/**").authenticated() // common 接口需要认证 (示例)
+                        .requestMatchers("/api/v1/graduation/web/inner/login/**").authenticated()
                         // 可以添加更多规则，例如基于角色的访问控制
                         // .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated() // 其他所有未匹配的请求都需要认证
@@ -40,6 +47,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 // 3. 配置 Session 管理为无状态 (适用于 Token 认证)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 // 4. 禁用默认的 Form Login 和 HTTP Basic (因为我们将实现自定义登录逻辑或 Token 认证)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)

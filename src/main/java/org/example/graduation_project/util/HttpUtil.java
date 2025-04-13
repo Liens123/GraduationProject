@@ -1,8 +1,8 @@
 package org.example.graduation_project.util;
 
 
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
+import lombok.SneakyThrows;
+import okhttp3.*;
 
 import java.util.concurrent.TimeUnit;
 
@@ -24,6 +24,24 @@ public class HttpUtil {
 
     public static OkHttpClient getClient() {return client;}
 
+    @SneakyThrows
+    public static String postJson(String url, String json, String token) {
+        RequestBody body = RequestBody.create(json, JSON);
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + token)
+                .header("Content-Type", "application/json")
+                .post(body)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                String errorBody = response.body() != null ? response.body().string() : "";
+                throw new RuntimeException("HTTP请求失败，状态码：" + response.code() + "，响应：" + errorBody);
+            }
+            return response.body() != null ? response.body().string() : "";
+        }
+    }
 
 
 }

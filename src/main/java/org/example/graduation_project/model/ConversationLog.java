@@ -5,10 +5,10 @@ import com.alibaba.excel.annotation.format.DateTimeFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
-public class ExcelData {
+public class ConversationLog {
 
     @Schema(description = "对话内容Id")
     @ExcelProperty("对话内容Id")
@@ -17,7 +17,7 @@ public class ExcelData {
     @Schema(description = "对话内容时间")
     @ExcelProperty("消息时间")
     @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
-    private Date time;
+    private LocalDate time;
 
     @Schema(description = "对话者身份")
     @ExcelProperty("角色")
@@ -67,11 +67,11 @@ public class ExcelData {
         this.status = status;
     }
 
-    public Date getTime() {
+    public LocalDate getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(LocalDate time) {
         this.time = time;
     }
 

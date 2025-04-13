@@ -5,7 +5,7 @@
 
     <!-- 字段映射 -->
     <!-- Updated column names based on conversation_log table -->
-    <resultMap id="ExcelDataResultMap" type="org.example.graduation_project.model.ConversationLog">
+    <resultMap id="ConversationLogMap" type="org.example.graduation_project.model.ConversationLog">
         <id column="id" jdbcType="BIGINT" property="id"/>               <!-- Changed jdbcType -->
         <result column="log_time" jdbcType="TIMESTAMP" property="time"/>     <!-- Changed column name -->
         <result column="role" jdbcType="VARCHAR" property="role"/>
@@ -14,19 +14,7 @@
         <result column="voice_url" jdbcType="VARCHAR" property="urlVoice"/>  <!-- Changed column name -->
     </resultMap>
 
-    <!-- Batch Insert into the new table 'conversation_log' -->
-    <insert id="batchInsert" parameterType="java.util.List">
-        INSERT INTO conversation_log <!-- Changed table name -->
-        (log_time, role, status, content, voice_url) <!-- Changed column names -->
-        VALUES
-        <foreach collection="list" item="item" separator=",">
-            (#{item.time, jdbcType=TIMESTAMP},      <!-- Property 'time' maps to column 'log_time' -->
-            #{item.role, jdbcType=VARCHAR},
-            #{item.status, jdbcType=VARCHAR},
-            #{item.content, jdbcType=LONGVARCHAR}, <!-- Use LONGVARCHAR for TEXT -->
-            #{item.urlVoice, jdbcType=VARCHAR})   <!-- Property 'urlVoice' maps to column 'voice_url' -->
-        </foreach>
-    </insert>
+    <!--    <select id="findByDate" resultType=""-->
 
 
 

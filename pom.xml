@@ -25,6 +25,7 @@
         <easyexcel.version>3.3.4</easyexcel.version> <!-- EasyExcel 版本 -->
         <okhttp.version>4.12.0</okhttp.version> <!-- OkHttp 版本 (如果需要) -->
         <lombok.version>1.18.32</lombok.version> <!-- Lombok 版本 (建议与编译器插件一致) -->
+        <fastjson.version>2.0.43</fastjson.version>
     </properties>
 
     <dependencies>
@@ -95,6 +96,13 @@
             <version>${okhttp.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version> <!-- 最新稳定版本 -->
+        </dependency>
+
+
         <!-- Spring Boot Test Starter (测试支持) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -113,6 +121,8 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+
     </dependencies>
 
     <build>
