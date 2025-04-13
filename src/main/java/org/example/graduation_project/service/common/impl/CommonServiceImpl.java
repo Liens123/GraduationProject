@@ -2,7 +2,6 @@ package org.example.graduation_project.service.common.impl;
 
 import com.alibaba.excel.EasyExcel;
 import jakarta.annotation.Resource;
-import org.apache.poi.ss.usermodel.*;
 import org.example.graduation_project.dao.excelupload.ExcelDataDao;
 import org.example.graduation_project.exception.BizException;
 import org.example.graduation_project.model.ExcelData;
@@ -21,8 +20,6 @@ import static org.example.graduation_project.service.constant.MAX_FILE_SIZE;
 public class CommonServiceImpl implements CommonService {
     @Resource
     private ExcelDataDao excelDataDao;
-
-    List<ExcelData> dataList = new ArrayList<>();
 
     @Override
     @Transactional
@@ -47,6 +44,7 @@ public class CommonServiceImpl implements CommonService {
             throw new BizException("文件格式不支持，请上传Excel文件（.xls或.xlsx）");
         }
 
+        List<ExcelData> dataList = new ArrayList<>();
 
         try (InputStream is = file.getInputStream()) {
             dataList = EasyExcel.read(is)

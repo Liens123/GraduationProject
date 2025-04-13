@@ -14,6 +14,4 @@ import org.example.graduation_project.model.AdminUser;
 public class LoginByPasswordResp {
     @Schema(description = "请求令牌")
     private String accessToken;
-    @Schema(description = "请求内容")
-    private AdminUser adminUser;
 }

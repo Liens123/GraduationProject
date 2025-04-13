@@ -1,5 +1,6 @@
 package org.example.graduation_project.api.inner.req;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginRequest {
+@Schema(description = "用户注册请求")
+public class LoginByPasswordReq {
     @NotBlank(message = "用户名不能为空")
     private String username;
 

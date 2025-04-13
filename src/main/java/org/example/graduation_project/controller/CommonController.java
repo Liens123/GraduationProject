@@ -3,8 +3,6 @@ package org.example.graduation_project.controller;
 import jakarta.annotation.Resource;
 import org.example.graduation_project.api.Result;
 import org.example.graduation_project.api.inner.CommonApi;
-import org.example.graduation_project.api.inner.LoginApi;
-import org.example.graduation_project.exception.BizException;
 import org.example.graduation_project.service.common.CommonService;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
