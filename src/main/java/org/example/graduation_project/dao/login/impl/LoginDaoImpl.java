@@ -1,6 +1,7 @@
 package org.example.graduation_project.dao.login.impl;
 
 import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.example.graduation_project.dao.login.LoginDao;
 import org.example.graduation_project.mapper.LoginMapper;
 import org.example.graduation_project.model.AdminUser;
@@ -12,6 +13,7 @@ import java.util.Date;
  * DAO实现类，用MyBatis的Mapper来封装CRUD
  */
 @Repository
+@RequiredArgsConstructor
 public class LoginDaoImpl implements LoginDao {
 
     @Resource
@@ -38,9 +40,8 @@ public class LoginDaoImpl implements LoginDao {
     }
 
     @Override
-    public int update(AdminUser adminUser) {
-        adminUser.setUpdatedTime(new Date());
-        return loginMapper.update(adminUser);
+    public int updatePassword(Long userId, String newEncodedPassword) {
+        return loginMapper.updatePasswordByID(userId, newEncodedPassword, new Date());
     }
 
     @Override
@@ -48,4 +49,5 @@ public class LoginDaoImpl implements LoginDao {
         // 直接调用mapper
         return loginMapper.findByUsername(username);
     }
+
 }

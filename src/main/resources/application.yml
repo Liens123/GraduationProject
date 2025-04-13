@@ -4,13 +4,9 @@ server:
 spring:
   application:
     name: graduation_project
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      password: 123456789
-      timeout: 10s
-      database: 0
+  docker:
+    compose:
+      enabled: false
   datasource:
     url: jdbc:mysql://localhost:3306/database_analysis
     username: root
@@ -21,7 +17,6 @@ spring:
       matching-strategy: ant_path_matcher
   thymeleaf:
     check-template-location: false
-
 
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
@@ -36,9 +31,4 @@ springdoc:
   swagger-ui:
     enabled: true
 
-  app:
-    security:
-      access-token:
-        redis-key-prefix: "login:token:"
-        expire-time-seconds: 3600
 

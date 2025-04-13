@@ -1,7 +1,10 @@
 package org.example.graduation_project.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.example.graduation_project.model.AdminUser;
+
+import java.util.Date;
 
 @Mapper
 public interface LoginMapper {
@@ -23,4 +26,8 @@ public interface LoginMapper {
     // 如果需要按主键查找、删除，也可添加：
     // AdminUser selectById(Long id);
     // int deleteById(Long id);
+
+    int updatePasswordByID(@Param("id")long id,
+                           @Param("encodedPassword")String encodedPassword,
+                           @Param("updatedTime") Date updatedTime);
 }

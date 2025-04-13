@@ -4,5 +4,5 @@
       "name": "springdoc.app.security.access-token.redis-key-prefix",
       "type": "java.lang.String",
       "description": "Description for springdoc.app.security.access-token.redis-key-prefix."
-  }
-] }
+    }
+  ] }

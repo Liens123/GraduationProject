@@ -4,39 +4,61 @@
 <mapper namespace="org.example.graduation_project.mapper.LoginMapper">
 
     <!-- 字段映射 -->
+    <!-- Maps columns from 'auth_user' table -->
     <resultMap id="BaseResultMap" type="org.example.graduation_project.model.AdminUser">
-        <id property="id" column="id"/>
-        <result property="username" column="username"/>
-        <result property="name" column="name"/>
-        <result property="password" column="password"/>
-        <result property="status" column="status"/>
-        <result property="operator" column="operator"/>
-        <result property="createdTime" column="created_time"/>
-        <result property="updatedTime" column="updated_time"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>           <!-- Changed jdbcType -->
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>     <!-- Changed jdbcType -->
+        <result property="operator" column="operator" jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <!-- 原有 -->
+    <!-- Select from the new table 'auth_user' -->
     <select id="findByUsername" resultMap="BaseResultMap" parameterType="String">
-        SELECT * FROM admin_user WHERE username = #{username} LIMIT 1
+        SELECT id, username, name, password, status, operator, created_time, updated_time
+        FROM auth_user <!-- Changed table name -->
+        WHERE username = #{username, jdbcType=VARCHAR}
+        LIMIT 1
     </select>
 
-    <!-- (新增) insert -->
+    <!-- Insert into the new table 'auth_user' -->
     <insert id="insert" parameterType="org.example.graduation_project.model.AdminUser">
-        INSERT INTO admin_user (username, name, password, status, operator, created_time, updated_time)
-        VALUES (#{username}, #{name}, #{password}, #{status}, #{operator}, #{createdTime}, #{updatedTime})
+        INSERT INTO auth_user <!-- Changed table name -->
+        (username, name, password, status, operator, created_time, updated_time)
+        VALUES
+        (#{username, jdbcType=VARCHAR},
+        #{name, jdbcType=VARCHAR},
+        #{password, jdbcType=VARCHAR},
+        #{status, jdbcType=TINYINT},    <!-- Changed jdbcType -->
+        #{operator, jdbcType=VARCHAR},
+        #{createdTime, jdbcType=TIMESTAMP},
+        #{updatedTime, jdbcType=TIMESTAMP})
     </insert>
 
-    <!-- (新增) update -->
+    <!-- Generic update on the new table 'auth_user' (Use with caution) -->
     <update id="update" parameterType="org.example.graduation_project.model.AdminUser">
-        UPDATE admin_user
+        UPDATE auth_user <!-- Changed table name -->
         SET
-        username = #{username},
-        name = #{name},
-        password = #{password},
-        status = #{status},
-        operator = #{operator},
-        updated_time = #{updatedTime}
-        WHERE id = #{id}
+        username = #{username, jdbcType=VARCHAR},
+        name = #{name, jdbcType=VARCHAR},
+        password = #{password, jdbcType=VARCHAR}, /* Avoid password update here */
+        status = #{status, jdbcType=TINYINT},     /* Changed jdbcType */
+        operator = #{operator, jdbcType=VARCHAR},
+        updated_time = #{updatedTime, jdbcType=TIMESTAMP}
+        WHERE id = #{id, jdbcType=BIGINT}              /* Changed jdbcType */
+    </update>
+
+    <!-- Specific password update on the new table 'auth_user' -->
+    <!-- Removed parameterType="map" as it's inferred from @Param in interface -->
+    <update id="updatePasswordByID">
+        UPDATE auth_user <!-- Changed table name -->
+        SET
+        password = #{encodedPassword, jdbcType=VARCHAR},
+        updated_time = #{updatedTime, jdbcType=TIMESTAMP}
+        WHERE id = #{id, jdbcType=BIGINT}                  /* Changed jdbcType */
     </update>
 
 </mapper>

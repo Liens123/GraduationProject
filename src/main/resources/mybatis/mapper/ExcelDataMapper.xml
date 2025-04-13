@@ -4,25 +4,28 @@
 <mapper namespace="org.example.graduation_project.mapper.ExcelDataMapper">
 
     <!-- 字段映射 -->
-    <resultMap id="ResultMap" type="org.example.graduation_project.model.ExcelData">
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="time" jdbcType="TIMESTAMP" property="time"/>
+    <!-- Updated column names based on conversation_log table -->
+    <resultMap id="ExcelDataResultMap" type="org.example.graduation_project.model.ExcelData">
+        <id column="id" jdbcType="BIGINT" property="id"/>               <!-- Changed jdbcType -->
+        <result column="log_time" jdbcType="TIMESTAMP" property="time"/>     <!-- Changed column name -->
         <result column="role" jdbcType="VARCHAR" property="role"/>
         <result column="status" jdbcType="VARCHAR" property="status"/>
-        <result column="content" jdbcType="VARCHAR" property="content"/>
-        <result column="url_voice" jdbcType="VARCHAR" property="urlVoice"/>
+        <result column="content" jdbcType="LONGVARCHAR" property="content"/> <!-- Changed jdbcType for TEXT -->
+        <result column="voice_url" jdbcType="VARCHAR" property="urlVoice"/>  <!-- Changed column name -->
     </resultMap>
 
+    <!-- Batch Insert into the new table 'conversation_log' -->
     <insert id="batchInsert" parameterType="java.util.List">
-        INSERT INTO t_excelcontent_text (time, role, status, content, url_voice)
+        INSERT INTO conversation_log <!-- Changed table name -->
+        (log_time, role, status, content, voice_url) <!-- Changed column names -->
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.time}, #{item.role}, #{item.status}, #{item.content}, #{item.urlVoice})
+            (#{item.time, jdbcType=TIMESTAMP},      <!-- Property 'time' maps to column 'log_time' -->
+            #{item.role, jdbcType=VARCHAR},
+            #{item.status, jdbcType=VARCHAR},
+            #{item.content, jdbcType=LONGVARCHAR}, <!-- Use LONGVARCHAR for TEXT -->
+            #{item.urlVoice, jdbcType=VARCHAR})   <!-- Property 'urlVoice' maps to column 'voice_url' -->
         </foreach>
     </insert>
 
 </mapper>
-
-
-
-

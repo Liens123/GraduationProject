@@ -10,10 +10,11 @@ public interface LoginDao {
     int save(AdminUser adminUser);
 
     /**
-     * @param adminUser
+     * @param id
+     * @param newEncodedPassword
      * @return
      */
-    int update(AdminUser adminUser);
+    int updatePassword(Long id, String newEncodedPassword);
 
     /**
      * @param username
