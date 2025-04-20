@@ -25,19 +25,6 @@ public class AdminUserController implements LoginApi {
 
     @Override
     public Result<LoginByPasswordResp> loginByPassword(LoginByPasswordReq req) {
-
-//        String dateTimeStr = "2024-12-15 19:17:44";
-//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-//// 1) 先把字符串解析为 LocalDateTime
-//        LocalDateTime ldt = LocalDateTime.parse(dateTimeStr, dtf);
-//// 2) 再转换为 LocalDate（只保留年月日）
-//        LocalDate date = ldt.toLocalDate();
-//        conversationStatsService.generateAndSaveDailyStats(date);
-//
-//
-//        String dateStr = "2024-12-15 00:00:00";
-//        LocalDate date1 = LocalDateTime.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toLocalDate();
-//        conversationStatsService.generateAndSaveHourlyStats(date1);
         return Result.success(loginService.login(req));
     }
 

@@ -9,5 +9,7 @@ public class InnerApiConstant {
     public static final String INNER_LOGIN_API = INNER_PREFIX + "/login";
     public static final String INNER_COMMON_API = INNER_PREFIX + "/common";
     public static final String INNER_STATS_API = INNER_PREFIX + "/stats";
+    public static final String INNER_CONVERSATION_LOG_API = INNER_PREFIX + "/conversationLog";
 
 }
+ 

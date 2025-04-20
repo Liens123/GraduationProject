@@ -24,6 +24,7 @@ public class SecurityConfig {
             "/api/v1/graduation/web/inner/login/password", // 登录接口
             "/api/v1/graduation/web/inner/login/register", //注册接口
             "/api/v1/graduation/web/inner/stats/**", //每日图表接口
+            "/api/v1/graduation/web/inner/conversationLog/**", //分页查询接口
             "/v3/api-docs/**",               // OpenAPI v3 文档
             "/swagger-ui.html",             // Swagger UI 页面
             "/swagger-ui/**",               // Swagger UI 静态资源
@@ -39,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers(PUBLIC_PATHS).permitAll() // 公开路径允许所有访问
                         .requestMatchers("/api/v1/graduation/web/inner/common/**").authenticated() // common 接口需要认证 (示例)
                         .requestMatchers("/api/v1/graduation/web/inner/login/**").authenticated()
+                        .requestMatchers("/api/v1/graduation/web/inner/conversationLog/**").authenticated()
                         // 可以添加更多规则，例如基于角色的访问控制
                         // .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated() // 其他所有未匹配的请求都需要认证

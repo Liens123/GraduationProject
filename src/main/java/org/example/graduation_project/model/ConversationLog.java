@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class ConversationLog {
@@ -17,7 +18,7 @@ public class ConversationLog {
     @Schema(description = "对话内容时间")
     @ExcelProperty("消息时间")
     @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
-    private LocalDate time;
+    private LocalDateTime time;
 
     @Schema(description = "对话者身份")
     @ExcelProperty("角色")
@@ -67,11 +68,11 @@ public class ConversationLog {
         this.status = status;
     }
 
-    public LocalDate getTime() {
+    public LocalDateTime getTime() {
         return time;
     }
 
-    public void setTime(LocalDate time) {
+    public void setTime(LocalDateTime time) {
         this.time = time;
     }
 

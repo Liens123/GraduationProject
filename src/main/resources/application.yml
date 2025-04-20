@@ -54,3 +54,15 @@ logging:
     org.mybatis: DEBUG
     org.springframework.transaction: DEBUG
     org.example.graduation_project: INFO
+
+kimi:
+  api:
+      url: https://api.moonshot.cn/v1/chat/completions
+      key: sk-1Z2Rhv9qUzjdbUPyIQrs6jNwCgEcBF7YSxMkUyjwUwJMnPTT
+      model: moonshot-v1-128k
+      temperature: 0.3
+      max-tokens: 20480
+      analysis_prompt: 你好
+      scoring_prompt: 你好
+
+

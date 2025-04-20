@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.io.IOException;
+
 
 @Tag(name = "用户认证接口", description = "账号密码登录 + 用户注册 + 修改密码 + 退出登录")
 @RequestMapping(InnerApiConstant.INNER_LOGIN_API)

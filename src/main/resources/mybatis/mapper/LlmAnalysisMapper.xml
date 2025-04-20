@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.graduation_project.mapper.LlmAnalysisMapper">
+
+    <resultMap id="AnalysisResultMap" type="org.example.graduation_project.model.AnalysisLlmDaily">
+        <id property="analysisId" column="analysis_id"/>
+        <result property="analysisDate" column="analysis_date"/>
+        <result property="peakHoursAnalysis" column="peak_hours_analysis"/>
+        <result property="userSentimentAnalysis" column="user_sentiment_analysis"/>
+        <result property="topicInterestAnalysis" column="topic_interest_analysis"/>
+        <result property="aiSuggestionAnalysis" column="ai_suggestion_analysis"/>
+        <result property="scorePeakHours" column="score_peak_hours"/>
+        <result property="scoreSentiment" column="score_sentiment"/>
+        <result property="scoreTopicInterest" column="score_topic_interest"/>
+        <result property="scoreSuggestions" column="score_suggestions"/>
+        <result property="scoreWeightedAverage" column="score_weighted_average"/>
+        <result property="scoringReasoning" column="scoring_reasoning"/>
+        <result property="llmAnalysisRawResponse" column="llm_analysis_raw_response"/>
+        <result property="llmScoringRawResponse" column="llm_scoring_raw_response"/>
+        <result property="status" column="status"/>
+        <result property="errorMessage" column="error_message"/>
+        <result property="processingStartedAt" column="processing_started_at"/>
+        <result property="processingEndedAt" column="processing_ended_at"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="org.example.graduation_project.model.AnalysisLlmDaily"
+            useGeneratedKeys="true" keyProperty="analysisId">
+        INSERT INTO analysis_llm_daily (
+        analysis_date, peak_hours_analysis, user_sentiment_analysis, topic_interest_analysis, ai_suggestion_analysis,
+        score_peak_hours, score_sentiment, score_topic_interest, score_suggestions, score_weighted_average, scoring_reasoning,
+        llm_analysis_raw_response, llm_scoring_raw_response, status, error_message,
+        processing_started_at, processing_ended_at, created_at, updated_at
+        ) VALUES (
+        #{analysisDate}, #{peakHoursAnalysis}, #{userSentimentAnalysis}, #{topicInterestAnalysis}, #{aiSuggestionAnalysis},
+        #{scorePeakHours}, #{scoreSentiment}, #{scoreTopicInterest}, #{scoreSuggestions}, #{scoreWeightedAverage}, #{scoringReasoning},
+        #{llmAnalysisRawResponse}, #{llmScoringRawResponse}, #{status}, #{errorMessage},
+        #{processingStartedAt}, #{processingEndedAt}, NOW(), NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="org.example.graduation_project.model.AnalysisLlmDaily">
+        UPDATE analysis_llm_daily
+        <set>
+            <if test="analysisDate != null">analysis_date = #{analysisDate},</if>
+            <if test="peakHoursAnalysis != null">peak_hours_analysis = #{peakHoursAnalysis},</if>
+            <if test="userSentimentAnalysis != null">user_sentiment_analysis = #{userSentimentAnalysis},</if>
+            <if test="topicInterestAnalysis != null">topic_interest_analysis = #{topicInterestAnalysis},</if>
+            <if test="aiSuggestionAnalysis != null">ai_suggestion_analysis = #{aiSuggestionAnalysis},</if>
+            <if test="scorePeakHours != null">score_peak_hours = #{scorePeakHours},</if>
+            <if test="scoreSentiment != null">score_sentiment = #{scoreSentiment},</if>
+            <if test="scoreTopicInterest != null">score_topic_interest = #{scoreTopicInterest},</if>
+            <if test="scoreSuggestions != null">score_suggestions = #{scoreSuggestions},</if>
+            <if test="scoreWeightedAverage != null">score_weighted_average = #{scoreWeightedAverage},</if>
+            <if test="scoringReasoning != null">scoring_reasoning = #{scoringReasoning},</if>
+            <if test="llmAnalysisRawResponse != null">llm_analysis_raw_response = #{llmAnalysisRawResponse},</if>
+            <if test="llmScoringRawResponse != null">llm_scoring_raw_response = #{llmScoringRawResponse},</if>
+            <if test="status != null">status = #{status},</if>
+            error_message = #{errorMessage}, <!-- Allow setting error message to null -->
+            <if test="processingStartedAt != null">processing_started_at = #{processingStartedAt},</if>
+            <if test="processingEndedAt != null">processing_ended_at = #{processingEndedAt},</if>
+            updated_at = NOW()
+        </set>
+        WHERE analysis_id = #{analysisId}
+    </update>
+
+    <select id="findById" resultMap="AnalysisResultMap">
+        SELECT * FROM analysis_llm_daily WHERE analysis_id = #{analysisId}
+    </select>
+
+    <select id="findLatestCompletedOrFailedByDate" resultMap="AnalysisResultMap">
+        SELECT * FROM analysis_llm_daily
+        WHERE analysis_date = #{analysisDate}
+        AND status IN ('COMPLETED', 'FAILED')
+        ORDER BY analysis_id DESC
+        LIMIT 1
+    </select>
+
+    <select id="findProcessingByDate" resultMap="AnalysisResultMap">
+        SELECT * FROM analysis_llm_daily
+        WHERE analysis_date = #{analysisDate}
+        AND status LIKE 'PROCESSING_%' -- Matches PROCESSING_ANALYSIS and PROCESSING_SCORING
+        ORDER BY analysis_id DESC
+    </select>
+
+</mapper>

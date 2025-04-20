@@ -57,24 +57,40 @@ CREATE TABLE `stat_conversation_hourly` (
     PRIMARY KEY (`stat_datetime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='每小时对话统计表'; -- 修改表注释
 
-
--- --- LLM每日分析表 (原 daily_llm_analysis) ---
--- 存储每日对话通过 LLM 分析得出的结果
+-- --- LLM每日分析表 (支持每日多次, 使用自增ID) ---
+-- 存储每日对话通过 LLM 分析得出的详细结果及评分
 DROP TABLE IF EXISTS `analysis_llm_daily`;
 CREATE TABLE `analysis_llm_daily` (
+    `analysis_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '分析记录主键ID',
     `analysis_date` DATE NOT NULL COMMENT '分析对应的日期',
-    `summary` TEXT NULL COMMENT 'LLM生成的对话摘要',
-    `sentiment` VARCHAR(50) NULL COMMENT 'LLM分析的情感倾向 (Positive, Negative, Neutral)',
-    `key_topics` JSON NULL COMMENT 'LLM提取的关键主题 (JSON数组)', -- 或 TEXT
-    `analysis_report_md` LONGTEXT NULL COMMENT 'LLM分析生成的Markdown格式报告',
-    `raw_llm_response` LONGTEXT NULL COMMENT 'LLM API返回的原始响应体',
-    `status` VARCHAR(20) NOT NULL DEFAULT 'PENDING' COMMENT '分析任务状态 (PENDING, PROCESSING, COMPLETED, FAILED)',
-    `error_message` TEXT NULL COMMENT '如果状态为FAILED, 记录错误信息',
-    `processing_started_at` TIMESTAMP NULL COMMENT '任务开始处理时间',
-    `processing_ended_at` TIMESTAMP NULL COMMENT '任务处理结束时间',
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录最后更新时间',
-    PRIMARY KEY (`analysis_date`),
-    INDEX `idx_status` (`status`) COMMENT '状态索引',
-    INDEX `idx_sentiment` (`sentiment`) COMMENT '情感倾向索引'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='LLM每日对话分析结果表'; -- 修改表注释
+
+    -- 分析内容字段 (使用TEXT存储，也可以考虑JSON类型如果数据库支持) --
+    `peak_hours_analysis` TEXT NULL COMMENT '高峰时段分析结果 (例如: JSON 字符串)',
+    `user_sentiment_analysis` TEXT NULL COMMENT '用户情感分析结果 (例如: JSON 字符串)',
+    `topic_interest_analysis` TEXT NULL COMMENT '用户话题兴趣分析结果 (包含原因)',
+    `ai_suggestion_analysis` TEXT NULL COMMENT 'AI回答改进建议',
+
+    -- 评分字段 --
+    `score_peak_hours` DECIMAL(4, 2) NULL COMMENT '高峰时段分析评分 (0-10)',
+    `score_sentiment` DECIMAL(4, 2) NULL COMMENT '情感分析评分 (0-10)',
+    `score_topic_interest` DECIMAL(4, 2) NULL COMMENT '话题兴趣分析评分 (0-10)',
+    `score_suggestions` DECIMAL(4, 2) NULL COMMENT 'AI建议评分 (0-10)',
+    `score_weighted_average` DECIMAL(4, 2) NULL COMMENT '加权平均总分 (0-10)',
+    `scoring_reasoning` TEXT NULL COMMENT 'LLM 对评分的简要说明',
+
+    -- LLM 交互原始数据 --
+    `llm_analysis_raw_response` LONGTEXT NULL COMMENT '第一次LLM分析调用的原始响应体',
+    `llm_scoring_raw_response` LONGTEXT NULL COMMENT '第二次LLM评分调用的原始响应体',
+
+    -- 任务元数据 --
+     `status` VARCHAR(30) NOT NULL DEFAULT 'PENDING' COMMENT '分析任务状态 (PENDING, PROCESSING_ANALYSIS, PROCESSING_SCORING, COMPLETED, FAILED)',
+     `error_message` TEXT NULL COMMENT '如果状态为FAILED, 记录错误信息',
+     `processing_started_at` TIMESTAMP NULL COMMENT '任务开始处理时间',
+     `processing_ended_at` TIMESTAMP NULL COMMENT '任务处理结束时间',
+     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
+     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录最后更新时间',
+
+     PRIMARY KEY (`analysis_id`),
+     INDEX `idx_analysis_date` (`analysis_date`) COMMENT '按日期查询索引',
+     INDEX `idx_date_status` (`analysis_date`, `status`) COMMENT '按日期和状态查询索引'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='LLM每日对话详细分析及评分表';

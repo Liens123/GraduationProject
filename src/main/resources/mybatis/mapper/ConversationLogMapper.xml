@@ -1,21 +1,64 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.example.graduation_project.mapper.ExcelDataMapper">
+<mapper namespace="org.example.graduation_project.mapper.ConversationLogMapper">
 
-    <!-- 字段映射 -->
-    <!-- Updated column names based on conversation_log table -->
-    <resultMap id="ConversationLogMap" type="org.example.graduation_project.model.ConversationLog">
-        <id column="id" jdbcType="BIGINT" property="id"/>               <!-- Changed jdbcType -->
-        <result column="log_time" jdbcType="TIMESTAMP" property="time"/>     <!-- Changed column name -->
-        <result column="role" jdbcType="VARCHAR" property="role"/>
-        <result column="status" jdbcType="VARCHAR" property="status"/>
-        <result column="content" jdbcType="LONGVARCHAR" property="content"/> <!-- Changed jdbcType for TEXT -->
-        <result column="voice_url" jdbcType="VARCHAR" property="urlVoice"/>  <!-- Changed column name -->
+    <!-- 为ConversationLogDTO定义一个resultMap -->
+    <resultMap id="ConversationLogDTOMap" type="org.example.graduation_project.dto.ConversationLogDTO">
+        <id column="id" property="id" />
+        <result column="log_time" property="time" javaType="java.time.LocalDateTime" />
+        <result column="role" property="role"/>
+        <result column="content" property="content"/>
+        <result column="voice_url" property="urlVoice"/>
     </resultMap>
 
-    <!--    <select id="findByDate" resultType=""-->
+    <select id="findLogs" resultMap="ConversationLogDTOMap"
+            parameterType="org.example.graduation_project.dto.ConversationQueryDTO">
+        SELECT
+        id, log_time, role, content, voice_url
+        FROM conversation_log
+        <where>
+            <if test="date != null">
+                AND DATE(log_time) = #{date}
+            </if>
+            <if test="role != null and role != ''">
+                AND role = #{role}
+            </if>
+            <if test="searchId != null">
+                AND id = #{searchId}
+            </if>
+            AND status != '违规'
+        </where>
+        ORDER BY id ASC
+        LIMIT #{offset}, #{pageSize}
+    </select>
 
+    <select id="countLogs" resultType="int"
+            parameterType="org.example.graduation_project.dto.ConversationQueryDTO">
+        SELECT COUNT(*)
+        FROM conversation_log
+        <where>
+            <if test="date != null">
+                AND DATE(log_time) = #{date}
+            </if>
+            <if test="role != null and role != ''">
+                AND role = #{role}
+            </if>
+            <if test="searchId != null">
+                AND id = #{searchId}
+            </if>
+            AND status != '违规'
+        </where>
+    </select>
 
+    <select id="findAllByDate" resultType="org.example.graduation_project.model.ConversationLog">
+        SELECT
+        id, log_time, role, status, content, voice_url
+        FROM conversation_log
+        WHERE DATE(log_time) = #{logDate}
+        AND status != '违规'
+        ORDER BY log_time ASC
+    </select>
 
 </mapper>
